@@ -1,4 +1,10 @@
 FROM python:3.11.4-slim-bullseye
+RUN apt-get update \
+    && apt-get install -y apache2-utils \
+    # 生成默认密码文件（生产环境建议通过构建参数）
+    && htpasswd -bc /etc/nginx/.htpasswd default_user default_pass \
+    # 设置文件权限
+    && chmod 644 /etc/nginx/.htpasswd
 RUN cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ENV API_PORT="15372" \
     NGINX_PORT="15373" \
